@@ -1,0 +1,183 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-08T05:47:14.950Z",
+  "summary": "Diff adds a new Motoko backend actor with Tool/Submission/Collection types and a React/TanStack Router frontend with public pages, admin route guard, tool cards, pagination, newsletter signup, and various hooks. However, several BuildRequest requirements are not evidenced in the shown diff (notably stable persistence/migrations, strict enum restrictions, full query/filter set, 1000-tool seeding, CSV validation/reporting, SEO/JSON-LD, ad-slot enforcement), and there are multiple unrequested features/violations (user profiles system, spinner animation, extra external link/branding, admin secret token URL init, and changes to “immutable” hook paths).",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Persist directory data across upgrades using stable storage patterns; expose stable types and enforce allowed Category and Pricing tag sets.",
+      "reason": "backend/main.mo shows in-memory vars/maps/sets but no evidence of stable variables or preupgrade/postupgrade hooks, and category/pricing are plain Text with no allowed-set enforcement shown.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Backend list tools API supports pagination (60/page), full-text search across name/description/category, combined filtering (Free, Paid, AI Based, Popular, New) and sorting (Newest, Most Popular, Alphabetical), returning total count.",
+      "reason": "Frontend hooks call listTools/searchTools with filter/sort, but backend implementations for full-text search, total count, and required filters (AI Based, New, Freemium) are not evidenced in the truncated backend diff; UI filter bar only shows All/Free/Paid/Popular.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/components/tools/ToolsSearchFilterBar.tsx"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Deterministic SEO-friendly slug generation with uniqueness conflict handling; tool detail API returns fields for Overview/Key Features/Pricing Type/Use Case/Official Link/Similar Tools.",
+      "reason": "Slug generation shown is simplistic (lowercase + replace spaces and '/'); no uniqueness conflict handling is evidenced, and tool type does not include fields for Key Features or Use Case (beyond description/pricing/category). Similar tools endpoint is called by frontend but backend implementation not evidenced.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Admin-only APIs for add/edit/delete tools, category management, collection management (featured), featured tools control, and SEO meta editor fields per tool/page.",
+      "reason": "addTool is shown and admin checks exist, but there is no evidence (in provided/truncated diff) of category management APIs, full collection management APIs, featured-tools control beyond flags, or an SEO meta editor structure per tool/page as specified.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useAdmin.ts",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Admin bulk CSV upload with validation (unique tools, 18–25 word description, allowed category, pricing tag, official link, icon URL), and a validation report of accepted/rejected rows with reasons.",
+      "reason": "Frontend includes a bulk upload route and a bulkUploadTools hook that appears to upload Tool objects, but there is no evidence of CSV parsing, validation rules, or per-row validation reporting in the diff provided.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "frontend/src/hooks/useAdmin.ts",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "Seed initial dataset of 1000 real, verified tools meeting the tool data rules (no placeholders, no duplicates, 18–25 word neutral descriptions, allowed categories/pricing).",
+      "reason": "No seeding file/data or initialization logic evidencing 1000 real tools is shown in the diff.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "requirement": "SEO support with meta title/description on Home/Categories/Collections/Tool pages plus JSON-LD (SoftwareApplication/Product + Breadcrumb).",
+      "reason": "No evidence of meta tag management (e.g., helmet) or JSON-LD rendering is shown in the added frontend files; only breadcrumb UI component is present.",
+      "evidence": [
+        "frontend/src/components/navigation/Breadcrumbs.tsx",
+        "frontend/src/pages/ToolDetailPage (not shown in diff summary)"
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "requirement": "Admin can view and export newsletter emails (e.g., CSV download) stored in backend; public form stores email with timestamp and shows privacy note.",
+      "reason": "Newsletter signup UI exists, and hooks suggest storage, but backend storage shown is a Set<Text> without timestamps, and no export/download mechanism is evidenced (only getNewsletterEmails hook).",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/components/newsletter/NewsletterSignup.tsx",
+        "frontend/src/hooks/useAdmin.ts"
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "requirement": "Include monetization ad-slot placeholders while enforcing max 2 ads per page at the layout level (without external ad scripts).",
+      "reason": "Disclaimer component exists, but no ad-slot components/placeholders or layout-level enforcement is evidenced in the shown files.",
+      "evidence": [
+        "frontend/src/components/layout/SiteLayout.tsx",
+        "frontend/src/components/layout/Footer.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "User profile system with permissioned profile read/write APIs.",
+      "reason": "BuildRequest non-goals include end-user accounts; REQ list does not request user profiles. Backend includes UserProfile type and profile APIs gated by a #user permission.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Admin initialization via secret token in URL parameter (caffeineAdminToken) and link/branding to caffeine.ai.",
+      "reason": "BuildRequest requires Internet Identity admin allowlist stored in backend; no requirement mentions URL secret tokens or caffeine.ai branding link in footer.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/components/layout/Footer.tsx"
+      ]
+    },
+    {
+      "description": "UI spinner animation using Tailwind 'animate-spin'.",
+      "reason": "Constraints explicitly prohibit UI animations; AdminRouteGuard shows a loading spinner with animate-spin.",
+      "evidence": [
+        "frontend/src/components/auth/AdminRouteGuard.tsx"
+      ]
+    },
+    {
+      "description": "Outbound link in footer to an external site with rel=\"noopener noreferrer\" (not the required rel for tool links) and a heart icon element.",
+      "reason": "Not requested; also introduces additional external outbound link unrelated to tool directory requirements.",
+      "evidence": [
+        "frontend/src/components/layout/Footer.tsx"
+      ]
+    },
+    {
+      "description": "Changes/additions under paths declared immutable in constraints (useActor.ts and useInternetIdentity.ts).",
+      "reason": "Constraints say not to edit those immutable frontend paths; diff shows files at those exact paths being added/changed (listed under ADDED FILES).",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/hooks/useInternetIdentity.ts"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/auth/AccessDeniedScreen.tsx",
+    "frontend/src/components/auth/AdminRouteGuard.tsx",
+    "frontend/src/components/auth/LoginButton.tsx",
+    "frontend/src/components/layout/Footer.tsx",
+    "frontend/src/components/layout/Header.tsx",
+    "frontend/src/components/layout/SiteLayout.tsx",
+    "frontend/src/components/legal/Disclaimer.tsx",
+    "frontend/src/components/navigation/Breadcrumbs.tsx",
+    "frontend/src/components/newsletter/NewsletterSignup.tsx",
+    "frontend/src/components/pagination/Pagination.tsx",
+    "frontend/src/components/tools/PricingBadge.tsx",
+    "frontend/src/components/tools/SimilarToolsGrid.tsx",
+    "frontend/src/components/tools/ToolCard.tsx",
+    "frontend/src/components/tools/ToolsSearchFilterBar.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useAdmin.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/hooks/useSeo.ts",
+    "frontend/src/i18n/en.ts",
+    "frontend/src/i18n/index.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/constants.ts",
+    "frontend/src/lib/csv.ts",
+    "frontend/src/lib/export/csvExport.ts",
+    "frontend/src/lib/seo/jsonLd.ts",
+    "frontend/src/lib/validation/toolValidation.ts",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/AboutPage.tsx",
+    "frontend/src/pages/CategoriesPage.tsx",
+    "frontend/src/pages/CollectionDetailPage.tsx",
+    "frontend/src/pages/CollectionsPage.tsx",
+    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/pages/SubmitToolPage.tsx",
+    "frontend/src/pages/ToolDetailPage.tsx",
+    "frontend/src/pages/ToolsListingPage.tsx",
+    "frontend/src/pages/admin/AdminDashboardPage.tsx",
+    "frontend/src/pages/admin/AdminToolsPage.tsx",
+    "frontend/src/pages/admin/BulkUploadPage.tsx",
+    "frontend/src/pages/admin/NewsletterAdminPage.tsx",
+    "frontend/src/pages/admin/SubmissionsReviewPage.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

@@ -1,0 +1,443 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Mix Daily AI & Digital Tools Directory (Frontend)",
+  "requirements": [
+    {
+      "id": "REQ-5",
+      "summary": "Add Internet Identity admin auth UX, admin route guarding, and access denied handling tied to backend admin checks.",
+      "acceptanceCriteria": [
+        "Unauthenticated users cannot access admin routes and cannot call admin mutations.",
+        "Authenticated but non-admin principals receive authorization errors and see an access denied UI.",
+        "At least one initial admin principal can be configured (documented as a deploy-time/manual step)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the main app shell with routing for public vs admin areas; add admin route guard that checks auth via existing useInternetIdentity hook and authorization via backend isCallerAdmin(). Use shadcn-ui layout primitives from frontend/src/components/ui to structure pages; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/LoginButton.tsx",
+          "operation": "create",
+          "description": "Add a login/logout button using the existing useInternetIdentity hook; clear React Query cache on logout. Use shadcn-ui Button component for consistent styling; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/AdminRouteGuard.tsx",
+          "operation": "create",
+          "description": "Implement an admin-only route wrapper that (1) requires Internet Identity sign-in and (2) queries backend isCallerAdmin() to allow or deny rendering; show AccessDeniedScreen when unauthorized. Use shadcn-ui Card/Alert for denied UI; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/AccessDeniedScreen.tsx",
+          "operation": "create",
+          "description": "Create an access denied screen for authenticated non-admin users, including a link back to Home. Use shadcn-ui Card/Separator components for clean presentation; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useAdmin.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for admin-related reads (getCallerUserRole, isCallerAdmin) and a helper to normalize/recognize authorization trap errors for consistent UX."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminDashboardPage.tsx",
+          "operation": "create",
+          "description": "Create an admin landing page with navigation to Tools, Collections, Submissions, Newsletter; ensure it is only reachable through AdminRouteGuard. Use shadcn-ui components for cards/buttons; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Implement admin bulk CSV upload UI with validation and a per-row import report, calling backend bulk upload capability.",
+      "acceptanceCriteria": [
+        "Admin can upload a CSV and see a validation report (rows accepted/rejected with reasons).",
+        "No duplicates are created (by normalized name and/or official link).",
+        "Descriptions outside 18–25 words are rejected with a clear message.",
+        "Only allowed categories and pricing tags are accepted.",
+        "Imported tools become visible in the public directory immediately after successful import (or after explicit publish if a publish flag is implemented)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/admin/BulkUploadPage.tsx",
+          "operation": "create",
+          "description": "Create an admin-only bulk upload page that accepts CSV file input, parses rows, validates fields (including description word count and allowed enums), displays accepted/rejected rows with reasons, and on confirm calls backend bulkUploadTools(). Use shadcn-ui Table, Badge, Button, and Alert components for the report UI; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/lib/csv.ts",
+          "operation": "create",
+          "description": "Implement a CSV parsing helper (header-based) suitable for admin imports and robust to commas/quotes where feasible for this phase; return structured rows plus parse errors."
+        },
+        {
+          "path": "frontend/src/lib/validation/toolValidation.ts",
+          "operation": "create",
+          "description": "Implement shared validation utilities for Tool CSV rows: normalize name/link for duplicate detection, enforce 18–25 word descriptions, enforce allowed category and pricing tag, and basic URL validation for official link and icon URL."
+        },
+        {
+          "path": "frontend/src/lib/constants.ts",
+          "operation": "create",
+          "description": "Add shared frontend constants for allowed categories and pricing tags to keep filters, forms, and validations consistent with backend rules."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the BulkUploadPage into the admin navigation and routes under AdminRouteGuard. Use shadcn-ui navigation primitives as needed; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Build public pages/navigation: header with Mix Daily branding, menu items, search bar, Add Your Tool CTA, and Home page sections (hero, featured collections, categories grid, daily new tools).",
+      "acceptanceCriteria": [
+        "Header renders the specified menu items and CTA and works on mobile-first layouts.",
+        "Home page renders all specified sections with the provided text (English).",
+        "Hero search input supports the provided placeholder text.",
+        "No animations are used; hover effects are minimal (color/shadow only)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/layout/SiteLayout.tsx",
+          "operation": "create",
+          "description": "Create a site-wide layout that renders the Header, main content container, and Footer; include a slot mechanism for up to 2 ad placeholders per page (per REQ-15). Use shadcn-ui components for structure; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/Header.tsx",
+          "operation": "create",
+          "description": "Implement the header with “Mix Daily” logo text, menu items (Home, Collections, Categories, Submit Tool, About), a search bar, and an “Add Your Tool” CTA linking to /submit; ensure mobile-first responsiveness. Use shadcn-ui Input, Button, and Sheet/Dropdown components as appropriate; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/Footer.tsx",
+          "operation": "create",
+          "description": "Implement footer including the site-wide disclaimer text (also satisfying REQ-15). Use shadcn-ui Separator and muted text styles; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "create",
+          "description": "Create the Home page with hero (headline/subheadline/search with required placeholder text), featured collections section (using backend getFeaturedCollections()), categories grid (from allowed categories), and “Daily New Tools Added” section (newest tools via backend listTools sort). Use shadcn-ui Card and Badge components for sections; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/AboutPage.tsx",
+          "operation": "create",
+          "description": "Create an About page that reiterates the disclaimer and explains the directory purpose in English; keep styling consistent and animation-free."
+        },
+        {
+          "path": "frontend/src/pages/CategoriesPage.tsx",
+          "operation": "create",
+          "description": "Create a Categories page that lists allowed categories and links into category-filtered listings. Use shadcn-ui Cards/Buttons for category tiles; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/CollectionsPage.tsx",
+          "operation": "create",
+          "description": "Create a Collections page that displays featured collections (via backend getFeaturedCollections()) and allows navigation into a collection detail view. Use shadcn-ui Card components; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/CollectionDetailPage.tsx",
+          "operation": "create",
+          "description": "Create a collection detail page that loads a collection by id (via backend getCollection()) and renders its tools using the shared tool card/list UI. Use shadcn-ui components for layout; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register public routes for Home, Collections, Categories, Submit Tool, About, plus collection detail; ensure Header links navigate correctly and pages are wrapped in SiteLayout."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Implement tool listing UI with tool cards, pricing badges, search/filter/sort controls, and pagination (60 per page) using backend listing/search capabilities.",
+      "acceptanceCriteria": [
+        "Tools list paginates with 60 tools per page and shows total pages or next/prev controls.",
+        "Visit Tool opens in a new tab and includes rel=\"nofollow noopener\".",
+        "Pricing badges use the specified colors: Free #4CAF50, Freemium #3F51B5, Paid #FF9800.",
+        "Search is instant (debounced) and updates results without full page reload."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/tools/ToolCard.tsx",
+          "operation": "create",
+          "description": "Create the tool card UI: 64x64 logo, tool name, 18–25 word description, pricing badge with required colors, category, and a “Visit Tool” outbound link (new tab, rel=\"nofollow noopener\"); include click-through to tool detail route. Use shadcn-ui Card, Badge, and Button components; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/tools/PricingBadge.tsx",
+          "operation": "create",
+          "description": "Implement a pricing badge component that maps Free/Freemium/Paid to the specified colors and consistent styling. Use shadcn-ui Badge base if appropriate; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/tools/ToolsSearchFilterBar.tsx",
+          "operation": "create",
+          "description": "Create combined search/filter/sort controls: search input (debounced), filter selections (Free, Paid, AI Based, Popular, New), and sorting (Newest, Most Popular, Alphabetical). Use shadcn-ui Input, Select, and Toggle/Checkbox components; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/pagination/Pagination.tsx",
+          "operation": "create",
+          "description": "Create a pagination component supporting 60/page with next/prev and/or page numbers, consuming totalPages from backend listTools. Use shadcn-ui Button components; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useTools.ts",
+          "operation": "create",
+          "description": "Add React Query hooks to fetch paginated tools via listTools(page, pageSize, filter, sortBy) and searchTools(searchTerm); include debouncing helper usage and ensure results update without full reload."
+        },
+        {
+          "path": "frontend/src/pages/ToolsListingPage.tsx",
+          "operation": "create",
+          "description": "Create a tools listing page that renders ToolCard grid/list with ToolsSearchFilterBar and Pagination; enforce 60 per page and show total count/total pages where appropriate."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the ToolsListingPage into navigation flows (e.g., Home sections, Categories links, Collections detail) without adding unnecessary top-level routes beyond required pages."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Create tool detail page routed by slug and render all required sections with breadcrumbs and similar tools.",
+      "acceptanceCriteria": [
+        "Navigating from a tool card opens a detail page at a stable slug-based route.",
+        "The page renders all required sections and shows similar tools from the same category.",
+        "Breadcrumb UI is present and reflects navigation hierarchy (e.g., Home > Category > Tool)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ToolDetailPage.tsx",
+          "operation": "create",
+          "description": "Implement slug-based tool detail page that loads tool via backend getToolBySlug(slug) and similar tools via getSimilarTools(toolId, limit); render sections: Overview, Key Features, Pricing Type, Use Case, Official Website Link, Similar Tools, using a consistent card-based layout."
+        },
+        {
+          "path": "frontend/src/components/navigation/Breadcrumbs.tsx",
+          "operation": "create",
+          "description": "Create breadcrumb UI component and use it on the Tool Detail page to show hierarchy (Home > Category > Tool). Use shadcn-ui Separator and Button/Link styling; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/tools/SimilarToolsGrid.tsx",
+          "operation": "create",
+          "description": "Render similar tools list (excluding current tool) reusing ToolCard; ensure layout remains mobile-first and animation-free."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register the tool detail route at a stable slug-based path (e.g., /tool/:slug) and ensure ToolCard navigation links to it."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Add SEO meta tags and JSON-LD (SoftwareApplication/Product + Breadcrumb) for indexable pages using real data.",
+      "acceptanceCriteria": [
+        "Tool pages render meta title/description following the specified pattern, using actual tool data.",
+        "JSON-LD is included for tool pages and breadcrumbs.",
+        "Categories and collections pages have meaningful meta tags (not placeholders)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useSeo.ts",
+          "operation": "create",
+          "description": "Implement a lightweight SEO hook to set document title, meta description, and inject/remove JSON-LD script tags per page without requiring changes to immutable entry files."
+        },
+        {
+          "path": "frontend/src/lib/seo/jsonLd.ts",
+          "operation": "create",
+          "description": "Add helpers to generate JSON-LD objects for SoftwareApplication/Product and Breadcrumb schema using tool and navigation data."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Apply useSeo() with meaningful Home meta title/description and avoid placeholder content."
+        },
+        {
+          "path": "frontend/src/pages/CategoriesPage.tsx",
+          "operation": "modify",
+          "description": "Apply useSeo() with meaningful Categories meta title/description."
+        },
+        {
+          "path": "frontend/src/pages/CollectionsPage.tsx",
+          "operation": "modify",
+          "description": "Apply useSeo() with meaningful Collections meta title/description."
+        },
+        {
+          "path": "frontend/src/pages/ToolDetailPage.tsx",
+          "operation": "modify",
+          "description": "Apply tool page SEO meta structure: title \"Tool Name – AI Tool | Mix Daily\" and description \"Discover Tool Name, features, pricing and best alternatives on Mix Daily.\"; inject JSON-LD for tool (SoftwareApplication or Product as appropriate) and Breadcrumb."
+        }
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "summary": "Implement public Submit Tool form with success confirmation and admin review UI to approve/reject submissions.",
+      "acceptanceCriteria": [
+        "Public users can submit a tool with the required fields and see a success confirmation.",
+        "Submissions are not publicly visible until approved.",
+        "Admin can review a list of submissions, approve/reject with a reason, and approved submissions appear in the directory."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/SubmitToolPage.tsx",
+          "operation": "create",
+          "description": "Create public Submit Tool page with form fields matching backend submitTool(name, iconUrl, description, category, pricingTag, officialLink); show success confirmation after submission. Use shadcn-ui Form/Input/Textarea/Select/Button components; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/SubmissionsReviewPage.tsx",
+          "operation": "create",
+          "description": "Create admin-only submissions list UI loading backend listSubmissions(); allow approveSubmission and rejectSubmission actions with clear feedback and error handling for authorization failures. Use shadcn-ui Table/Dialog/Alert components; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useSubmissions.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for listSubmissions, approveSubmission, rejectSubmission and cache invalidation after actions."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire /submit into public routes and SubmissionsReviewPage into admin routes (behind AdminRouteGuard); ensure Header menu item “Submit Tool” links correctly."
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Add newsletter signup UI storing emails in backend and an admin view to export collected emails.",
+      "acceptanceCriteria": [
+        "Newsletter form validates basic email format and stores the email with timestamp.",
+        "A public privacy-friendly note is displayed near the form (English).",
+        "Admin can view and export newsletter emails (e.g., CSV download)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/newsletter/NewsletterSignup.tsx",
+          "operation": "create",
+          "description": "Create a newsletter signup component with basic email validation, a privacy-friendly note in English, and submission via backend subscribeNewsletter(email). Use shadcn-ui Input/Button/Alert components; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/admin/NewsletterAdminPage.tsx",
+          "operation": "create",
+          "description": "Create admin-only newsletter page that loads backend getNewsletterEmails() and provides an export-to-CSV download generated on the client. Use shadcn-ui Table and Button components; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/lib/export/csvExport.ts",
+          "operation": "create",
+          "description": "Add a small utility to generate CSV content and trigger browser download for newsletter email export."
+        },
+        {
+          "path": "frontend/src/hooks/useNewsletter.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for subscribing and for admin fetching of stored newsletter emails; include error handling for authorization traps."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Place NewsletterSignup into an appropriate Home section (e.g., below Daily New Tools Added) without introducing animations or extra pages."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire NewsletterAdminPage into admin navigation and routes under AdminRouteGuard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Apply global theme (colors, Inter font, spacing, rounded cards), ensure mobile-first premium clean look, and enforce no animations/minimal hover effects.",
+      "acceptanceCriteria": [
+        "Global styles match the specified colors and typography (Inter).",
+        "Cards use white background with soft shadow and rounded corners (16–18px).",
+        "No animated transitions are used; hover effects are limited to subtle color/shadow changes.",
+        "UI remains usable and visually consistent on mobile widths."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Create global styles importing/defining Inter font usage and set theme tokens: background #F4F1FF, primary #6B4EFF, secondary #FFD84D; establish base typography (bold headings) and card styling defaults; avoid animation/transition utilities except subtle hover color/shadow."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Adjust Tailwind theme tokens (CSS variable mapping and/or additional named colors) to ensure primary/secondary/background align with required palette and support ~18px radii."
+        },
+        {
+          "path": "frontend/src/components/layout/SiteLayout.tsx",
+          "operation": "modify",
+          "description": "Ensure layout applies background color, generous spacing, and mobile-first container sizing; avoid animation classes and keep hover effects minimal."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Add disclaimer, enforce outbound link rel attributes, and implement ad slot placeholders with a hard maximum of two per page.",
+      "acceptanceCriteria": [
+        "Disclaimer text is visible on appropriate pages (e.g., footer and/or About).",
+        "All outbound official links include rel=\"nofollow noopener\" and open in new tabs.",
+        "Ad slots (if rendered) never exceed two per page by design."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/legal/Disclaimer.tsx",
+          "operation": "create",
+          "description": "Create a reusable disclaimer component with the exact required text for inclusion in Footer and About."
+        },
+        {
+          "path": "frontend/src/components/monetization/AdSlot.tsx",
+          "operation": "create",
+          "description": "Create a UI-only ad placeholder component (no external scripts) that can render labeled ad placements."
+        },
+        {
+          "path": "frontend/src/components/monetization/AdSlotsProvider.tsx",
+          "operation": "create",
+          "description": "Implement a provider/context to track ad slots rendered on a page and enforce a maximum of 2 slots per page at the layout level."
+        },
+        {
+          "path": "frontend/src/components/layout/SiteLayout.tsx",
+          "operation": "modify",
+          "description": "Wrap page content with AdSlotsProvider and enforce the max 2 ads per page policy by design; include standard placements where needed without exceeding the limit."
+        },
+        {
+          "path": "frontend/src/components/tools/ToolCard.tsx",
+          "operation": "modify",
+          "description": "Ensure “Visit Tool” outbound links always open in a new tab and include rel=\"nofollow noopener\"; apply the same rel/target rules to any official website links shown elsewhere."
+        },
+        {
+          "path": "frontend/src/pages/AboutPage.tsx",
+          "operation": "modify",
+          "description": "Include Disclaimer component prominently to satisfy compliance visibility beyond the footer."
+        },
+        {
+          "path": "frontend/src/components/layout/Footer.tsx",
+          "operation": "modify",
+          "description": "Include Disclaimer component site-wide in the footer."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Prepare an i18n-ready structure with centralized English strings (no language switch UI).",
+      "acceptanceCriteria": [
+        "Text rendering is centralized in a way that can support a second locale later.",
+        "Current UI remains fully English with no missing strings.",
+        "No routing/UX for language switching is required in this phase."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/i18n/en.ts",
+          "operation": "create",
+          "description": "Create an English strings dictionary covering shared UI labels, header menu items, CTAs, and common section titles."
+        },
+        {
+          "path": "frontend/src/i18n/index.ts",
+          "operation": "create",
+          "description": "Create a minimal i18n accessor (e.g., t(key)) with English default and a structure that can accept additional locales later without changing routing."
+        },
+        {
+          "path": "frontend/src/components/layout/Header.tsx",
+          "operation": "modify",
+          "description": "Replace hardcoded header/menu/CTA strings with centralized i18n keys while keeping the English copy unchanged."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Replace Home section headings/subheadings/placeholder text with i18n keys while keeping the English copy unchanged."
+        },
+        {
+          "path": "frontend/src/pages/SubmitToolPage.tsx",
+          "operation": "modify",
+          "description": "Replace form labels/help text/success confirmation text with i18n keys while keeping the English copy unchanged."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build “Mix Daily” (mixdaily.in), a modern premium AI & digital tools directory website (English, future Hindi-ready) with card-based UI, SEO-friendly tool pages, search/filter/sort, pagination, admin panel, monetization, newsletter, and prefilled with 1000 real verified tools (no placeholders).",
+  "architectural_notes": [
+    "Design system: modern/premium/clean, no animations; minimal hover effects; generous whitespace; mobile-first; Inter font; theme colors/background (#F4F1FF) and rounded cards (~16–18px).",
+    "Tool data quality rules: no placeholder tools/text; verify tool exists; no duplicates; official name/logo/homepage only; rewrite descriptions (18–25 words) without copying; rel=\"nofollow noopener\" on outbound links.",
+    "SEO requirements: indexable Home/Categories/Collections/Tool pages; meta title/description template; structured data schemas (SoftwareApplication, Product, Breadcrumb).",
+    "Performance target: 90+ page speed; image optimization + lazy loading."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-add-admin-authentication-using-internet-identity-sign-in-on-the-frontend-and-an-admin-allowlist-of-principals-stored-in-the-backend-only-allow-allowlisted-principals-to-access-admin-apis-and-the-admin-ui-routes",
+      "title": "Add admin authentication using Internet Identity sign-in on the frontend and an admin allowlist of principals stored in the backend; only allow allowlisted principals to access admin APIs and the admin UI routes.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-bulk-tool-upload-via-csv-in-the-admin-panel-with-csv-validation-enforcing-official-product-name-unique-tools-no-duplicates-18-25-word-description-single-allowed-category-correct-pricing-tag-official-homepage-link-and-an-icon-url-that-points-to-the-official-logo-favicon-source",
+      "title": "Implement bulk tool upload via CSV in the admin panel, with CSV validation enforcing: official product name, unique tools (no duplicates), 18–25 word description, single allowed category, correct pricing tag, official homepage link, and an icon URL that points to the official logo/favicon source.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-public-frontend-pages-and-navigation-matching-the-provided-structure-header-with-mix-daily-logo-text-menu-home-collections-categories-submit-tool-about-search-bar-and-add-your-tool-cta-linking-to-submit-and-the-home-page-sections-hero-with-headline-subheadline-search-featured-collections-categories-grid-and-daily-new-tools-added-section",
+      "title": "Build the public frontend pages and navigation matching the provided structure: Header with “Mix Daily” logo text, menu (Home, Collections, Categories, Submit Tool, About), search bar, and “Add Your Tool” CTA linking to /submit; and the Home page sections (hero with headline/subheadline/search, featured collections, categories grid, and “Daily New Tools Added” section).",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-tools-listing-ui-with-the-specified-tool-card-design-logo-64x64-square-transparent-white-background-tool-name-18-25-word-description-pricing-badge-free-freemium-paid-with-specified-badge-colors-category-and-visit-tool-button-opening-the-official-link-in-a-new-tab-with-rel-nofollow-noopener-include-pagination-60-per-page-and-integrate-search-filter-sort-controls",
+      "title": "Implement the tools listing UI with the specified tool card design: logo (64x64 square, transparent/white background), tool name, 18–25 word description, pricing badge (Free/Freemium/Paid with specified badge colors), category, and “Visit Tool” button opening the official link in a new tab with rel=\"nofollow noopener\"; include pagination (60 per page) and integrate search/filter/sort controls.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-the-tool-detail-page-using-seo-friendly-urls-and-render-the-required-sections-overview-key-features-pricing-type-use-case-official-website-link-similar-tools-with-a-consistent-card-based-layout-include-breadcrumb-navigation",
+      "title": "Create the Tool Detail page using SEO-friendly URLs and render the required sections (Overview, Key Features, Pricing Type, Use Case, Official Website Link, Similar Tools) with a consistent card-based layout; include breadcrumb navigation.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-seo-support-on-indexable-pages-home-categories-collections-tool-pages-including-meta-title-description-per-the-provided-structure-and-json-ld-schema-types-softwareapplication-or-product-as-appropriate-plus-breadcrumb",
+      "title": "Add SEO support on indexable pages (Home, Categories, Collections, Tool Pages) including meta title/description per the provided structure and JSON-LD schema types (SoftwareApplication or Product as appropriate, plus Breadcrumb).",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-submit-tool-page-as-a-public-form-that-creates-a-pending-toolsubmission-in-the-backend-plus-an-admin-review-ui-to-approve-reject-submissions-and-convert-approved-submissions-into-published-tools",
+      "title": "Implement the “Submit Tool” page as a public form that creates a pending ToolSubmission in the backend, plus an admin review UI to approve/reject submissions and convert approved submissions into published tools.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-newsletter-signup-ui-phase-1-that-stores-email-signups-in-the-backend-no-external-email-service-integration-and-provide-an-admin-view-to-export-the-collected-emails",
+      "title": "Add newsletter signup UI (phase 1) that stores email signups in the backend (no external email service integration) and provide an admin view to export the collected emails.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-the-provided-ui-theme-and-layout-rules-consistently-across-the-frontend-background-f4f1ff-primary-6b4eff-secondary-ffd84d-inter-font-bold-headings-generous-spacing-border-radii-18px-modern-premium-clean-look-mobile-first-no-animations-minimal-hover-effects",
+      "title": "Apply the provided UI theme and layout rules consistently across the frontend: background #F4F1FF, primary #6B4EFF, secondary #FFD84D, Inter font, bold headings, generous spacing, border radii ~18px, modern premium clean look, mobile-first, no animations, minimal hover effects.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-legal-compliance-ui-elements-site-wide-disclaimer-mix-daily-does-not-own-these-tools-ensure-outbound-tool-links-use-the-specified-rel-attributes-and-include-placeholders-for-monetization-placements-while-enforcing-max-2-ads-per-page-at-the-layout-level-without-integrating-external-ad-scripts",
+      "title": "Add legal/compliance UI elements: site-wide disclaimer (“Mix Daily does not own these tools...”), ensure outbound tool links use the specified rel attributes, and include placeholders for monetization placements while enforcing “max 2 ads per page” at the layout level (without integrating external ad scripts).",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-prepare-the-frontend-for-future-hindi-support-by-adding-an-i18n-ready-structure-english-as-default-without-changing-current-english-copy-or-adding-hindi-translations-yet",
+      "title": "Prepare the frontend for future Hindi support by adding an i18n-ready structure (English as default) without changing current English copy or adding Hindi translations yet.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Implement full web frontend + backend for Mix Daily tools directory website",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Homepage UI: hero search, featured collections, categories grid, daily new tools section (auto-update)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Tools listing: tool cards (logo, description, pricing tag, category, visit button) + pagination (60/page)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Tool detail pages with SEO-friendly URLs and sections (overview, features, pricing, use case, official link, similar tools)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Search, filters (Free/Paid/AI Based/Popular/New) and sorting (Newest/Most Popular/Alphabetical)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Admin panel: add/edit/delete tools, bulk CSV upload, category management, featured tools control, SEO meta editor",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Seed database with 1000 real verified AI & digital tools following strict data rules (official names, official links, real logos, rewritten 18–25 word descriptions, correct pricing, single allowed category)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "SEO + monetization + compliance: indexable pages, schema (SoftwareApplication/Product/Breadcrumb), AdSense limits (max 2 ads/page), affiliate/featured/sponsored, legal disclaimers",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Newsletter signup (phase 1) and future-ready hooks (Hindi support readiness, phase 2: reviews/bookmarks)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Create the core data model and persistence in the single Motoko main actor for a tools directory, including: Tool (name, icon URL, description, category, pricing tag, official link, createdAt, updatedAt, popularity/featured flags), Category (from the allowed set), Collection (e.g., “Top 10 AI Tools Today”), and ToolSubmission (public “Submit Tool” entries pending admin review).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Implement backend query APIs to support the public directory UX: list tools with pagination (60 per page), full-text search across tool name/description/category, filtering (Free, Paid, AI Based, Popular, New), and sorting (Newest, Most Popular, Alphabetical).",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Implement backend tool detail retrieval by SEO-friendly slug/URL key derived from the official tool name, and include data needed to render the tool detail page sections: Overview, Key Features, Pricing Type, Use Case, Official Website Link, and Similar Tools.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Implement admin-only backend APIs for: add/edit/delete tools, category management, collection management (including featured collections), featured tools control, and SEO meta editor fields per tool/page as specified in the SEO meta structure.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Seed the app with an initial dataset of 1000 real, verified AI and digital tools that follow the provided tool data rules (no placeholders, no fake descriptions, no duplicates; official names, official homepage links, correct pricing tag, one allowed category; 18–25 word neutral descriptions).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Mix Daily",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

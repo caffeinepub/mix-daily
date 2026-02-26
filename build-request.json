@@ -1,0 +1,346 @@
+{
+  "kind": "build_request",
+  "title": "Build Mix Daily AI & Digital Tools Directory (frontend + Motoko backend)",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create the core data model and persistence in the single Motoko main actor for a tools directory, including: Tool (name, icon URL, description, category, pricing tag, official link, createdAt, updatedAt, popularity/featured flags), Category (from the allowed set), Collection (e.g., “Top 10 AI Tools Today”), and ToolSubmission (public “Submit Tool” entries pending admin review).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2",
+          "msg-11"
+        ],
+        "quotes": [
+          "\"Tools Directory Website\"",
+          "\"Start building please\""
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes stable types for Tool, Category, Collection, ToolSubmission.",
+        "Data is persisted across upgrades using stable storage patterns (add migration file only if state upgrades are necessary later).",
+        "Categories are restricted to: AI Tools, Image Tools, Writing Tools, Video Tools, Developer Tools, SEO Tools, Student Tools, Business Tools.",
+        "Pricing tag is restricted to: Free, Freemium, Paid."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement backend query APIs to support the public directory UX: list tools with pagination (60 per page), full-text search across tool name/description/category, filtering (Free, Paid, AI Based, Popular, New), and sorting (Newest, Most Popular, Alphabetical).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"tools_per_page\": 60, \"load_type\": \"pagination (not infinite scroll)\""
+        ]
+      },
+      "acceptanceCriteria": [
+        "Listing endpoint supports page index and returns total count for pagination UI.",
+        "Search is “instant” from the frontend perspective (fast query, debounced on UI).",
+        "Filters and sorting can be combined with search and pagination.",
+        "“New” filter is based on createdAt/added date; “Popular” is based on a stored popularity metric/flag."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Implement backend tool detail retrieval by SEO-friendly slug/URL key derived from the official tool name, and include data needed to render the tool detail page sections: Overview, Key Features, Pricing Type, Use Case, Official Website Link, and Similar Tools.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"seo_friendly_url\": true",
+          "\"sections\": [\"Tool Overview\",\"Key Features\",\"Pricing Type\",\"Use Case\",\"Official Website Link\",\"Similar Tools\"]"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each tool has a deterministic slug generated from its name; conflicts are handled without breaking uniqueness.",
+        "Tool detail API returns tool plus enough fields to render all required sections.",
+        "Similar tools endpoint/field returns a list of tools from the same category (excluding the current tool)."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Implement admin-only backend APIs for: add/edit/delete tools, category management, collection management (including featured collections), featured tools control, and SEO meta editor fields per tool/page as specified in the SEO meta structure.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"admin_panel\": { \"features\": [\"Add / Edit / Delete Tools\",\"Bulk Tool Upload (CSV)\",\"Category Management\",\"Featured Tools Control\",\"SEO Meta Editor\"] }"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Create/update/delete operations are restricted to admins only.",
+        "Admin can mark tools as featured and adjust popularity values/flags.",
+        "Admin can set per-tool meta title/description following the provided pattern.",
+        "Collections can be created and assigned tools."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add admin authentication using Internet Identity sign-in on the frontend and an admin allowlist of principals stored in the backend; only allow allowlisted principals to access admin APIs and the admin UI routes.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2",
+          "msg-11"
+        ],
+        "quotes": [
+          "\"admin_panel\": { \"features\": [...] }",
+          "\"Start building please\""
+        ]
+      },
+      "acceptanceCriteria": [
+        "Unauthenticated users cannot access admin routes and cannot call admin mutations.",
+        "Authenticated but non-admin principals receive authorization errors and see an access denied UI.",
+        "At least one initial admin principal can be configured (documented as a deploy-time/manual step)."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Implement bulk tool upload via CSV in the admin panel, with CSV validation enforcing: official product name, unique tools (no duplicates), 18–25 word description, single allowed category, correct pricing tag, official homepage link, and an icon URL that points to the official logo/favicon source.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"Bulk Tool Upload (CSV)\"",
+          "\"Replace all placeholder tools with real, verified AI and digital tools only. No dummy names, no fake descriptions, no generic text.\""
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin can upload a CSV and see a validation report (rows accepted/rejected with reasons).",
+        "No duplicates are created (by normalized name and/or official link).",
+        "Descriptions outside 18–25 words are rejected with a clear message.",
+        "Only allowed categories and pricing tags are accepted.",
+        "Imported tools become visible in the public directory immediately after successful import (or after explicit publish if a publish flag is implemented)."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Seed the app with an initial dataset of 1000 real, verified AI and digital tools that follow the provided tool data rules (no placeholders, no fake descriptions, no duplicates; official names, official homepage links, correct pricing tag, one allowed category; 18–25 word neutral descriptions).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "\"1000 real ai rools\""
+        ]
+      },
+      "acceptanceCriteria": [
+        "On first deploy, the directory contains 1000 tools and none contain placeholder/generic names.",
+        "No duplicate tools exist in the seeded dataset (by name/link).",
+        "Each seeded entry includes: tool_name, tool_icon_url, description, category, pricing_tag, official_link.",
+        "Seeded descriptions are original (not copied verbatim from official sites) and remain professional/neutral."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Build the public frontend pages and navigation matching the provided structure: Header with “Mix Daily” logo text, menu (Home, Collections, Categories, Submit Tool, About), search bar, and “Add Your Tool” CTA linking to /submit; and the Home page sections (hero with headline/subheadline/search, featured collections, categories grid, and “Daily New Tools Added” section).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"header\": { \"logo_text\": \"Mix Daily\", \"menu\": [\"Home\",\"Collections\",\"Categories\",\"Submit Tool\",\"About\"], \"search_bar\": true }",
+          "\"homepage\": { \"hero_section\": { ... } }"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Header renders the specified menu items and CTA and works on mobile-first layouts.",
+        "Home page renders all specified sections with the provided text (English).",
+        "Hero search input supports the provided placeholder text.",
+        "No animations are used; hover effects are minimal (color/shadow only)."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Implement the tools listing UI with the specified tool card design: logo (64x64 square, transparent/white background), tool name, 18–25 word description, pricing badge (Free/Freemium/Paid with specified badge colors), category, and “Visit Tool” button opening the official link in a new tab with rel=\"nofollow noopener\"; include pagination (60 per page) and integrate search/filter/sort controls.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"tool_card\": { \"fields\": [\"tool_name\",\"short_description (max 20 words)\",\"tool_logo\",\"pricing_tag (Free / Freemium / Paid)\",\"category\",\"visit_button\"] }",
+          "\"pagination\": { \"tools_per_page\": 60, \"load_type\": \"pagination (not infinite scroll)\" }"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Tools list paginates with 60 tools per page and shows total pages or next/prev controls.",
+        "Visit Tool opens in a new tab and includes rel=\"nofollow noopener\".",
+        "Pricing badges use the specified colors: Free #4CAF50, Freemium #3F51B5, Paid #FF9800.",
+        "Search is instant (debounced) and updates results without full page reload."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Create the Tool Detail page using SEO-friendly URLs and render the required sections (Overview, Key Features, Pricing Type, Use Case, Official Website Link, Similar Tools) with a consistent card-based layout; include breadcrumb navigation.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"tool_detail_page\": { \"seo_friendly_url\": true, \"sections\": [...] }",
+          "\"schema\": [\"SoftwareApplication\",\"Product\",\"Breadcrumb\"]"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Navigating from a tool card opens a detail page at a stable slug-based route.",
+        "The page renders all required sections and shows similar tools from the same category.",
+        "Breadcrumb UI is present and reflects navigation hierarchy (e.g., Home > Category > Tool)."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Add SEO support on indexable pages (Home, Categories, Collections, Tool Pages) including meta title/description per the provided structure and JSON-LD schema types (SoftwareApplication or Product as appropriate, plus Breadcrumb).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"seo\": { \"indexable_pages\": [\"Home\",\"Categories\",\"Collections\",\"Tool Pages\"], \"schema\": [\"SoftwareApplication\",\"Product\",\"Breadcrumb\"], \"meta_structure\": { \"title\": \"Tool Name – AI Tool | Mix Daily\", \"description\": \"Discover Tool Name, features, pricing and best alternatives on Mix Daily.\" } }"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Tool pages render meta title/description following the specified pattern, using actual tool data.",
+        "JSON-LD is included for tool pages and breadcrumbs.",
+        "Categories and collections pages have meaningful meta tags (not placeholders)."
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "text": "Implement the “Submit Tool” page as a public form that creates a pending ToolSubmission in the backend, plus an admin review UI to approve/reject submissions and convert approved submissions into published tools.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"menu\": [\"Home\",\"Collections\",\"Categories\",\"Submit Tool\",\"About\"]"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Public users can submit a tool with the required fields and see a success confirmation.",
+        "Submissions are not publicly visible until approved.",
+        "Admin can review a list of submissions, approve/reject with a reason, and approved submissions appear in the directory."
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "text": "Add newsletter signup UI (phase 1) that stores email signups in the backend (no external email service integration) and provide an admin view to export the collected emails.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"newsletter\": true"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Newsletter form validates basic email format and stores the email with timestamp.",
+        "A public privacy-friendly note is displayed near the form (English).",
+        "Admin can view and export newsletter emails (e.g., CSV download)."
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Apply the provided UI theme and layout rules consistently across the frontend: background #F4F1FF, primary #6B4EFF, secondary #FFD84D, Inter font, bold headings, generous spacing, border radii ~18px, modern premium clean look, mobile-first, no animations, minimal hover effects.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"design_style\": \"Modern, premium, clean, no animation\"",
+          "\"theme\": { \"background\": \"#F4F1FF\", \"primary_color\": \"#6B4EFF\", \"secondary_color\": \"#FFD84D\" ... }"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Global styles match the specified colors and typography (Inter).",
+        "Cards use white background with soft shadow and rounded corners (16–18px).",
+        "No animated transitions are used; hover effects are limited to subtle color/shadow changes.",
+        "UI remains usable and visually consistent on mobile widths."
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Add legal/compliance UI elements: site-wide disclaimer (“Mix Daily does not own these tools...”), ensure outbound tool links use the specified rel attributes, and include placeholders for monetization placements while enforcing “max 2 ads per page” at the layout level (without integrating external ad scripts).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"disclaimer\": \"Mix Daily does not own these tools. All logos, trademarks, and links belong to their respective owners.\"",
+          "\"ad_policy\": \"No intrusive ads, max 2 ads per page\""
+        ]
+      },
+      "acceptanceCriteria": [
+        "Disclaimer text is visible on appropriate pages (e.g., footer and/or About).",
+        "All outbound official links include rel=\"nofollow noopener\" and open in new tabs.",
+        "Ad slots (if rendered) never exceed two per page by design."
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "text": "Prepare the frontend for future Hindi support by adding an i18n-ready structure (English as default) without changing current English copy or adding Hindi translations yet.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "\"language\": \"English (future Hindi support ready)\""
+        ]
+      },
+      "acceptanceCriteria": [
+        "Text rendering is centralized in a way that can support a second locale later.",
+        "Current UI remains fully English with no missing strings.",
+        "No routing/UX for language switching is required in this phase."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor (no additional backend services).",
+    "Do not edit immutable frontend paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
+    "No UI animations; hover effects must be minimal (color/shadow only).",
+    "Use English for all user-facing text in this phase.",
+    "Do not use placeholder/fake tools, logos, names, descriptions, or generic filler content in seeded tool data.",
+    "All tool links must open in a new tab and include rel=\"nofollow noopener\".",
+    "Do not integrate third-party auth (use Internet Identity only).",
+    "Do not integrate external email providers for the newsletter (store signups internally)."
+  ],
+  "nonGoals": [
+    "Phase 2 features: user accounts for end users, tool reviews, bookmarking tools.",
+    "Real-time features (websockets/chat/push notifications).",
+    "External databases or non-Motoko backend services.",
+    "Automated external verification/scraping of tools from the web at runtime (seed/import data is provided/managed within the app).",
+    "Running Google AdSense scripts or payment integrations in this phase (only UI placements/config and policy enforcement)."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

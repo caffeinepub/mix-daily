@@ -1,0 +1,260 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-admin-authentication-using-internet-identity-sign-in-on-the-frontend-and-an-admin-allowlist-of-principals-stored-in-the-backend-only-allow-allowlisted-principals-to-access-admin-apis-and-the-admin-ui-routes",
+      "featureTitle": "Add admin authentication using Internet Identity sign-in on the frontend and an admin allowlist of principals stored in the backend; only allow allowlisted principals to access admin APIs and the admin UI routes.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/auth/AccessDeniedScreen.tsx",
+        "frontend/src/components/auth/AdminRouteGuard.tsx",
+        "frontend/src/components/auth/LoginButton.tsx",
+        "frontend/src/hooks/useAdmin.ts",
+        "frontend/src/pages/admin/AdminDashboardPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-bulk-tool-upload-via-csv-in-the-admin-panel-with-csv-validation-enforcing-official-product-name-unique-tools-no-duplicates-18-25-word-description-single-allowed-category-correct-pricing-tag-official-homepage-link-and-an-icon-url-that-points-to-the-official-logo-favicon-source",
+      "featureTitle": "Implement bulk tool upload via CSV in the admin panel, with CSV validation enforcing: official product name, unique tools (no duplicates), 18–25 word description, single allowed category, correct pricing tag, official homepage link, and an icon URL that points to the official logo/favicon source.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/lib/constants.ts",
+        "frontend/src/lib/csv.ts",
+        "frontend/src/lib/validation/toolValidation.ts",
+        "frontend/src/pages/admin/BulkUploadPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-the-public-frontend-pages-and-navigation-matching-the-provided-structure-header-with-mix-daily-logo-text-menu-home-collections-categories-submit-tool-about-search-bar-and-add-your-tool-cta-linking-to-submit-and-the-home-page-sections-hero-with-headline-subheadline-search-featured-collections-categories-grid-and-daily-new-tools-added-section",
+      "featureTitle": "Build the public frontend pages and navigation matching the provided structure: Header with “Mix Daily” logo text, menu (Home, Collections, Categories, Submit Tool, About), search bar, and “Add Your Tool” CTA linking to /submit; and the Home page sections (hero with headline/subheadline/search, featured collections, categories grid, and “Daily New Tools Added” section).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/Footer.tsx",
+        "frontend/src/components/layout/Header.tsx",
+        "frontend/src/components/layout/SiteLayout.tsx",
+        "frontend/src/pages/AboutPage.tsx",
+        "frontend/src/pages/CategoriesPage.tsx",
+        "frontend/src/pages/CollectionDetailPage.tsx",
+        "frontend/src/pages/CollectionsPage.tsx",
+        "frontend/src/pages/HomePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-the-tools-listing-ui-with-the-specified-tool-card-design-logo-64x64-square-transparent-white-background-tool-name-18-25-word-description-pricing-badge-free-freemium-paid-with-specified-badge-colors-category-and-visit-tool-button-opening-the-official-link-in-a-new-tab-with-rel-nofollow-noopener-include-pagination-60-per-page-and-integrate-search-filter-sort-controls",
+      "featureTitle": "Implement the tools listing UI with the specified tool card design: logo (64x64 square, transparent/white background), tool name, 18–25 word description, pricing badge (Free/Freemium/Paid with specified badge colors), category, and “Visit Tool” button opening the official link in a new tab with rel=\"nofollow noopener\"; include pagination (60 per page) and integrate search/filter/sort controls.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/pagination/Pagination.tsx",
+        "frontend/src/components/tools/PricingBadge.tsx",
+        "frontend/src/components/tools/ToolCard.tsx",
+        "frontend/src/components/tools/ToolsSearchFilterBar.tsx",
+        "frontend/src/pages/ToolsListingPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-the-tool-detail-page-using-seo-friendly-urls-and-render-the-required-sections-overview-key-features-pricing-type-use-case-official-website-link-similar-tools-with-a-consistent-card-based-layout-include-breadcrumb-navigation",
+      "featureTitle": "Create the Tool Detail page using SEO-friendly URLs and render the required sections (Overview, Key Features, Pricing Type, Use Case, Official Website Link, Similar Tools) with a consistent card-based layout; include breadcrumb navigation.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/navigation/Breadcrumbs.tsx",
+        "frontend/src/components/tools/SimilarToolsGrid.tsx",
+        "frontend/src/pages/ToolDetailPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-seo-support-on-indexable-pages-home-categories-collections-tool-pages-including-meta-title-description-per-the-provided-structure-and-json-ld-schema-types-softwareapplication-or-product-as-appropriate-plus-breadcrumb",
+      "featureTitle": "Add SEO support on indexable pages (Home, Categories, Collections, Tool Pages) including meta title/description per the provided structure and JSON-LD schema types (SoftwareApplication or Product as appropriate, plus Breadcrumb).",
+      "files": [
+        "frontend/src/hooks/useSeo.ts",
+        "frontend/src/lib/seo/jsonLd.ts",
+        "frontend/src/pages/CategoriesPage.tsx",
+        "frontend/src/pages/CollectionsPage.tsx",
+        "frontend/src/pages/HomePage.tsx",
+        "frontend/src/pages/ToolDetailPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-the-submit-tool-page-as-a-public-form-that-creates-a-pending-toolsubmission-in-the-backend-plus-an-admin-review-ui-to-approve-reject-submissions-and-convert-approved-submissions-into-published-tools",
+      "featureTitle": "Implement the “Submit Tool” page as a public form that creates a pending ToolSubmission in the backend, plus an admin review UI to approve/reject submissions and convert approved submissions into published tools.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/SubmitToolPage.tsx",
+        "frontend/src/pages/admin/SubmissionsReviewPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-12"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-newsletter-signup-ui-phase-1-that-stores-email-signups-in-the-backend-no-external-email-service-integration-and-provide-an-admin-view-to-export-the-collected-emails",
+      "featureTitle": "Add newsletter signup UI (phase 1) that stores email signups in the backend (no external email service integration) and provide an admin view to export the collected emails.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/newsletter/NewsletterSignup.tsx",
+        "frontend/src/lib/export/csvExport.ts",
+        "frontend/src/pages/HomePage.tsx",
+        "frontend/src/pages/admin/NewsletterAdminPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-the-provided-ui-theme-and-layout-rules-consistently-across-the-frontend-background-f4f1ff-primary-6b4eff-secondary-ffd84d-inter-font-bold-headings-generous-spacing-border-radii-18px-modern-premium-clean-look-mobile-first-no-animations-minimal-hover-effects",
+      "featureTitle": "Apply the provided UI theme and layout rules consistently across the frontend: background #F4F1FF, primary #6B4EFF, secondary #FFD84D, Inter font, bold headings, generous spacing, border radii ~18px, modern premium clean look, mobile-first, no animations, minimal hover effects.",
+      "files": [
+        "frontend/src/components/layout/SiteLayout.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-legal-compliance-ui-elements-site-wide-disclaimer-mix-daily-does-not-own-these-tools-ensure-outbound-tool-links-use-the-specified-rel-attributes-and-include-placeholders-for-monetization-placements-while-enforcing-max-2-ads-per-page-at-the-layout-level-without-integrating-external-ad-scripts",
+      "featureTitle": "Add legal/compliance UI elements: site-wide disclaimer (“Mix Daily does not own these tools...”), ensure outbound tool links use the specified rel attributes, and include placeholders for monetization placements while enforcing “max 2 ads per page” at the layout level (without integrating external ad scripts).",
+      "files": [
+        "frontend/src/components/layout/Footer.tsx",
+        "frontend/src/components/layout/SiteLayout.tsx",
+        "frontend/src/components/legal/Disclaimer.tsx",
+        "frontend/src/components/tools/ToolCard.tsx",
+        "frontend/src/pages/AboutPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-prepare-the-frontend-for-future-hindi-support-by-adding-an-i18n-ready-structure-english-as-default-without-changing-current-english-copy-or-adding-hindi-translations-yet",
+      "featureTitle": "Prepare the frontend for future Hindi support by adding an i18n-ready structure (English as default) without changing current English copy or adding Hindi translations yet.",
+      "files": [
+        "frontend/src/components/layout/Header.tsx",
+        "frontend/src/i18n/en.ts",
+        "frontend/src/i18n/index.ts",
+        "frontend/src/pages/HomePage.tsx",
+        "frontend/src/pages/SubmitToolPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

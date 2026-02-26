@@ -1,0 +1,5 @@
+{
+  "frontend/src/components/tools/ToolCard.tsx": "Tool card component displaying tool information with proper type-safe routing using params for dynamic slug navigation.",
+  "frontend/src/pages/HomePage.tsx": "Home page with hero section, featured tools, collections, categories grid, and newsletter signup using type-safe navigation with params.",
+  "frontend/src/pages/CollectionsPage.tsx": "Collections listing page displaying featured collections with type-safe navigation using params for collection detail routes."
+}
